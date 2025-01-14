@@ -147,7 +147,7 @@ void Program1()
     {
       delay(100);
       Slide_R();
-      delay(700);
+      delay(500);
       AO();
       delay(100);
       SpinL();
@@ -186,7 +186,7 @@ void Program1()
           {
             delay(100);
             Slide_L();
-            delay(700);
+            delay(500);
             AO();
             delay(100);
             SpinR();
@@ -216,10 +216,6 @@ void Program1()
       { // เช็คตะเกียบ
         beep(500);
         beep(500);
-        delay(100);
-        Backward();
-        delay(255);
-        AO();
         delay(200);
         Block_FD_Pass();
         delay(200);
@@ -386,6 +382,7 @@ void forwardline()
     }
   }
   AO();
+  delay(200);
   Read_Color();
 }
 void walkline()
@@ -429,7 +426,7 @@ void walkline()
 void Slide_L_check()
 {
   check_state = 0;
-  for (l = 1; l <= 2000; l++)
+  for (l = 1; l <= 1500; l++)
   {
     if (analogRead(L) < SensorL && analogRead(BL) < SensorBL)
     {
@@ -440,17 +437,11 @@ void Slide_L_check()
     }
     else if (analogRead(L) < SensorL && analogRead(BL) > SensorBL)
     {
-      motor(1, 40);
-      motor(2, 30);
-      motor(3, -40);
-      motor(4, -30);
+    SR(35);
     }
     else if (analogRead(L) > SensorL && analogRead(BL) < SensorBL)
     {
-      motor(1, 30);
-      motor(2, -40);
-      motor(3, -30);
-      motor(4, 40);
+     SL(35);
     }
     else
     {
@@ -463,7 +454,7 @@ void Slide_L_check()
 void Slide_R_check()
 {
   check_state = 0;
-  for (m = 1; m <= 2000; m++)
+  for (m = 1; m <= 1500; m++)
   {
     if (analogRead(R2) < SensorR2 && analogRead(BR) < SensorBR)
     {
@@ -474,17 +465,11 @@ void Slide_R_check()
     }
     else if (analogRead(R2) < SensorR2 && analogRead(BR) > SensorBR)
     {
-      motor(1, -40);
-      motor(2, -30);
-      motor(3, 40);
-      motor(4, 30);
+  SL(35);
     }
     else if (analogRead(R2) > SensorR2 && analogRead(BR) < SensorBR)
     {
-      motor(1, -30);
-      motor(2, 40);
-      motor(3, 30);
-      motor(4, -40);
+    SR(35);
     }
     else
     {
@@ -556,7 +541,7 @@ void Read_Color()
       oled.text(6, 0, "Color");
       oled.text(6, 6, "Yellow");
     }
-    else if (g > x && g >= r && g >= b && lux >= 4 && colorTemp <= 6500)
+    else if (g > x && g >= r && g >= b && lux >= 4 && colorTemp <= 5500)
     {
 
       Color_state = 1;
@@ -635,18 +620,10 @@ void Check_Color()
         box_Green();
         a = 10;
       }
+      a = 10;
       oled.show();
       if (Color_state == 1)
       {
-        /*Color_Count = Color_Count + 1;
-         if (Color_Count == 4)
-         {
-           beep(1000);
-           beep(1000);
-           beep(1000);
-           beep(1000);
-           AO();
-         }*/
         check_allbox();
         delay(200);
         turnaround();
