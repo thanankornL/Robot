@@ -11,7 +11,7 @@ unsigned long myTime, DistanTime;
 #define ServoBG 2
 #define flag 3
 bool box_R = 0, box_G = 0, box_B = 0, box_Y = 0;
-int Slide_TimeSet = 600;  //เวลาจากตรงกลางถึงเช็คหลุม +20
+int Slide_TimeSet = 650;  //เวลาจากตรงกลางถึงเช็คหลุม +20
 int FD_Check_Time = 1100;
 int Slide_Haf_Block = 250;      //เวลาเส้นขอบมาตรงกลาง
 int Slide_Full_Block = 600;     //เวลาสไลด์ 1 ช่อง
@@ -26,7 +26,7 @@ int SensorL = 2150;
 int SensorBL = 2250;
 int SensorBR = 2050;
 
-int SensorSwicth = 0;
+int SensorSwicth = 1;
 int Speed = 40;      //ความเร็ว
 int TurnSpeed = 40;  //ความเร็วตอนเลี้ยว
 int Program;
@@ -255,12 +255,7 @@ void Block_BK_Pass() {
 }
 void Slide_L_Check() {
   AO();
-  motor(1, Speed);
-  motor(2, -Speed);
-  motor(3, -Speed);
-  motor(4, Speed);
   delay(100);
-  AO();
   myTime = millis();
   motor(1, -Speed);
   motor(2, Speed);
@@ -274,9 +269,9 @@ void Slide_L_Check() {
     }
   }
   AO();
-  delay(200);
+  delay(100);
   if (DistanTime <= Slide_TimeSet) {
-    Tack = 1;  //เจอสไลด์กลับ
+    
     TrimL();
     delay(100);
     motor(1, Speed);
@@ -284,27 +279,20 @@ void Slide_L_Check() {
     motor(3, -Speed);
     motor(4, Speed);
     delay(Slide_Haf_Block);
+    Tack = 1;  //เจอสไลด์กลับ
   } else {  //ไม่เจอกลับมาเพื่อรอเลี้ยว
-     Tack = 0;
-    AO();
-    delay(100);
+    
     motor(1, Speed);
     motor(2, -Speed);
     motor(3, -Speed);
     motor(4, Speed);
     delay(DistanTime);
     AO();
- 
+    Tack = 0;
   }
   AO();
 }
 void Slide_R_Check() {
-  AO();
-  motor(1, -Speed);
-  motor(2, Speed);
-  motor(3, Speed);
-  motor(4, -Speed);
-  delay(100);
   AO();
   delay(100);
   myTime = millis();
@@ -320,7 +308,7 @@ void Slide_R_Check() {
     }
   }
   AO();
-  delay(200);
+  delay(100);
   if (DistanTime <= Slide_TimeSet) {
   
     TrimR();
@@ -330,12 +318,9 @@ void Slide_R_Check() {
     motor(3, Speed);
     motor(4, -Speed);
     delay(Slide_Haf_Block);
-      Tack = 1;  //เจอสไลด์กลับ
+    Tack = 1;  //เจอสไลด์กลับ
     
   } else {  //ไม่เจอกลับเลี้ยวก่อน
-    
-    AO();
-    delay(100);
     motor(1, -Speed);
     motor(2, Speed);
     motor(3, Speed);
@@ -457,7 +442,7 @@ void Read_Color_Box() {  //อ่าค่าสีแสดงจอแบบ�
     oled.text(4, 5, "%d", colorTemp);
     if (i >= 1) {
       float x = (r + g + b) / 3;
-      if (r > x && r >= g && r >= b && lux <= 1) {
+      if (r > x && r > g && r > b && lux <= 1) {
         oled.text(6, 0, "Color");
         oled.text(6, 6, "Red");
         beep(500);
@@ -543,7 +528,7 @@ void Read_Color() {  //อ่าค่าสีแสดงจอแบบละ
     oled.text(4, 0, "Temp");
     oled.text(4, 5, "%d", colorTemp);
     float x = (r + g + b) / 3;
-    if (r > x && r >= g && r >= b && lux <= 1) {
+    if (r > x && r > g && r > b && lux <= 1) {
       oled.text(6, 0, "Color");
       oled.text(6, 6, "Red");
     } else if (b > x && b > r && b >= g && lux <= 1) {
