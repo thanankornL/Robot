@@ -23,7 +23,7 @@ int SensorR2 = 2300 ;  //ค่าแสงเซนเซอร์
 int SensorL = 2150 ;
 int SensorBR = 2200 ;  //ค่าแสงเซนเซอร์
 int SensorBL = 2250 ;
-int SensorSwicth = 1100 ;
+int SensorSwicth = 1 ;
 int Speed = 40; //ความเร็ว
 int TurnSpeed = 40; //ความเร็วตอนเลี้ยว
 int Program ;
@@ -32,8 +32,10 @@ bool Tack = 0; ; // เก็บค่าเจอเส้น
 bool Bride = 0; 
 bool BK_Loop = 0; //ลูปถอยหลัง
 bool FD_Loop = 1; 
+bool Coler_state = 0 ;
 int l;
 int m;
+int Turnaround = 1640 ;
 
 void setup(void) {
    beep(1000);
@@ -192,7 +194,7 @@ void FD_Check(){
     AO();
    if(DistanTime >= FD_Check_Time){
      FD(Speed); //ไม่เจอไปต่อ
-     delay(Block_FD_Pass_Time-FD_Check_Time);
+     delay(Block_FD_Pass_Time);
      Tack = 0;
    }else{  //เจอ
      FD_Trim();
@@ -224,7 +226,7 @@ void Block_FD_Pass(){
   myTime=millis();
   FD(Speed);
   while(1){
-    if( analogRead(Swicth) > SensorSwicth){    //เช็คสพาน
+    if( digitaRead(Swicth) == SensorSwicth){    //เช็คสพาน
          Bride = 1 ;
          FD_Loop = 0; 
          Tack = 1 ;
@@ -624,4 +626,13 @@ void Slide_L()
       motor(2, Speed);
       motor(3, Speed);
       motor(4, -Speed);
+}
+
+void turnaround() {
+  motor(1, Speed);
+  motor(2, Speed);
+  motor(3, -Speed);
+  motor(4, -Speed);
+  delay(Turnaround);
+  AO();
 }
